@@ -1,118 +1,131 @@
 #include "main.h"
-
 /**
- * _strlen - returns a string
- * @s: integer to be used
- * Return: length of string
+ * _getenv - get enviroment variable by name
+ * @name: name of the variable
+ * Return: pointer
  */
-size_t _strlen(const char *s)
+char *_getenv(char *name)
 {
-        int i;
+char **env, *c, *_name;
 
-        i = 0;
-        while (s[i] != '\0')
-        {
-                i++;
-        }
-        return ((i + 1));
+env = environ;
+while (*env != NULL)
+{
+for (c = *env, _name = name; *c == *_name; c++, _name++)
+{
+if (*c == '=')
+break;
 }
-
-/**
- * _strcmp - compares two strings
- * @s1: first string, of two, to be compared in length
- * @s2: second string, of two, to be compared
- * Return: 0 on success, anything else is a failure
- */
-int _strcmp(char *s1, char *s2)
-{
-        int i;
-
-        i = 0;
-        while (s1[i] == s2[i])
-        {
-                if (s1[i] == '\0')
-                {
-                        return (0);
-                }
-                i++;
-        }
-        return (s1[i] - s2[i]);
+if ((*c == '=') && (*_name == '\0'))
+return (c + 1);
+env++;
+}
+return (NULL);
 }
 /**
- * _strdup - copies a string to another
- * @duplicate: the array
- * Return: pointer of sting copied
+ * _calloc - allocates memory for an array
+ * @size : int
+ * Return: pointer
  */
-char *_strdup(char *duplicate)
+void *_calloc(unsigned int size)
 {
-        char *copy;
-        int len, i;
+char *a;
+unsigned int i;
 
-        if (duplicate == 0)
-                return (NULL);
-
-        for (len = 0; duplicate[len]; len++)
-                ;
-        copy = malloc((len + 1) * sizeof(char));
-        for (i = 0; i <= len; i++)
-                copy[i] = duplicate[i];
-
-        return (copy);
+if (size == 0)
+return (NULL);
+a = malloc(size);
+if (a == NULL)
+return (NULL);
+for (i = 0; i < size; i++)
+{
+a[i] = '\0';
+}
+return (a);
 }
 /**
- * read_textfile - function that reads a text file and prints
- * it to the POSIX standard output.
- *@filename: is the file to read
- *@letters: is the number of letters it sould read and print
- * Return: printed chars.
+ * _itoa - turns integer to str
+ * @num : int
+ * @str : string
+ * Return: str
  */
-
-ssize_t read_textfile(const char *filename, size_t letters)
+char *_itoa(int num, char *str)
 {
-        int fd;
-        size_t read_buf, printed;
-        char *buf = malloc(sizeof(char) * letters);
+int i = 0, r;
+int isNegative = 0;
 
-        if (buf == NULL)
-        {
-                return (-1);
-        }
-        if (filename == NULL)
-                return (-1);
-        fd = open(filename, O_RDONLY);
-        if (fd == -1)
-        {
-                free(buf);
-                return (-1);
-        }
-        read_buf = read(fd, buf, letters);
-        if (read_buf == -1UL)
-        {
-                free(buf);
-                return (-1);
-        }
-        printed = write(STDOUT_FILENO, buf, read_buf);
-        if (printed == -1UL)
-        {
-                free(buf);
-                return (-1);
-                              }
-        write(1, "\n", 1);
-        free(buf);
-        close(fd);
-        return (printed);
+if (num == 0)
+{
+str[i++] = '0';
+str[i] = '\0';
+return (str);
+}
+
+if (num < 0)
+{
+isNegative = 1;
+num = -num;
+}
+
+while (num != 0)
+{
+r = num % 10;
+str[i++] = (r > 9) ? (r - 10) + 'a' : r + '0';
+num = num / 10;
+}
+
+if (isNegative == 1)
+str[i++] = '-';
+str[i] = '\0';
+rev_string(str);
+return (str);
 }
 /**
- * free_array - frees an array
- * @str : double pointer
+ *rev_string - reverse string
+ *@s : string
+ *Return: 0
  */
-void free_array(char **str)
+void rev_string(char *s)
 {
-        int i;
+char h;
+int i, j;
+int c = 0;
 
-for (i = 0; str[i] != NULL; i++)
+for (i = 0; s[i] != '\0'; i++)
 {
-free(str[i]);
+c++;
 }
-free(str);
+for (j = 0 ; j < c / 2 ; j++)
+{
+h = s[c - j - 1];
+s[c - j - 1] = s[j];
+s[j] = h;
+}
+}
+/**
+ * _atoi - convert into integer
+ * @s : string
+ * Return: 0
+ */
+int _atoi(char *s)
+{
+int i, sign = 1, num = 0, res;
+
+for (i = 0; s[i] != '\0';)
+{
+if (s[i] == '-')
+{
+sign = sign * (-1);
+i++;
+}
+else if ((s[i] >= '0') && (s[i] <= '9'))
+{
+num = num * 10 + (s[i] - '0');
+i++;
+}
+else
+i++;
+}
+res = (sign *num);
+return (res);
 }

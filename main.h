@@ -1,45 +1,38 @@
-#ifndef MAIN_H
-#define MAIN_H
+#ifndef _MAIN_H_
+#define _MAIN_H_
 
-#include <stdio.h>
-#include <unistd.h>
 #include <sys/types.h>
-#include <string.h>
+#include <unistd.h>
 #include <sys/wait.h>
+#include <stdio.h>
 #include <stdlib.h>
-#include <signal.h>
+#include <string.h>
+#include <stdio.h>
 #include <sys/stat.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <linux/limits.h>
-
-#define lsh_RL_BUFSIZE 1024
-#define lsh_TOK_BUFSIZE 64
-#define lsh_TOK_DELIM " \t\r\n\a"
-
-void sig_handler(int signum);
-int lsh_cd(char **args);
-int lsh_help(char **args);
-int lsh_exit(char **args);
-int lsh_env(char **args);
-int lsh_history(char **args);
-int lsh_launch(char **args);
-char **split_input(char *line, char *delim);
-char *add_command(char *command, char **PATH_splitted);
-char **lsh_split_line(char *line);
-char *lsh_gen(char *directory, char *command);
-ssize_t read_textfile(const char *filename, size_t letters);
-char *_getenv(char *env);
-int lsh_execute(char **args);
-void lsh_loop(void);
-int _strcmp(char *s1, char *s2);
-char *_strdup(char *str);
-size_t _strlen(const char *s);
-char *lsh_read_line(void);
-void free_array(char **str);
-
-
+#include <string.h>
+#include <signal.h>
 
 extern char **environ;
-
+int _atoi(char *s);
+void _perror(int count);
+void free_array(char **str);
+void sig(int signal);
+void rev_string(char *s);
+void *_calloc(unsigned int size);
+int int_len(int n);
+void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
+char *_getline();
+int _strcmp(char *s1, char *s2);
+char *_strcpy(char *dest, char *src);
+int _strlen(char *s);
+char *_strchr(char *s, char c);
+int _putchar(char c);
+char **split(char *line, char *div);
+int _exec(char *cmd, char **array);
+char *path(char *cmd);
+void print_env(void);
+char *_strcat(char *dest, char *src);
+char *_getenv(char *path);
+char *_itoa(int num, char *str);
+void prompt(void);
 #endif
