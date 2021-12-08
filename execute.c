@@ -1,40 +1,35 @@
 #include "main.h"
 /**
- * lsh_execute - execute builtins
- * @args: command entered
- * Return: the executing of one of the builtins
- */
-
-int lsh_execute(char **args)
+*_exec - execute the command
+*@cmd: the command
+*@array: array holdin the argments
+*Return: Return 0 in success
+*/
+int _exec(char *cmd, char **array)
 {
-        int i;
+pid_t pid;
+int status;
 
-        int (*function_func[])(char **) = {
-                &lsh_cd,
-                &lsh_help,
-                &lsh_exit,
-                &lsh_env,
-};
+if (cmd == NULL || array == NULL)
+return (-1);
 
-char *function_str[] = {
-        "cd",
-        "help",
-        "exit",
-        "env",
-};
-
-
-        if (args[0] == NULL)
+pid = fork();
+if (pid < 0)
 {
-        return (1);
+perror("fail to fork");
+return (-1);
 }
-        for (i = 0; i <= 4; i++)
+else if (pid == 0)
 {
-        if (strcmp(args[0], function_str[i]) == 0)
-        {
-                return ((*function_func[i])(args));
-        }
-
+if (execve(cmd, array, environ) != 0)
+{
+perror("fail to execute");
+return (-1);
 }
-        return (lsh_launch(args));
+}
+else
+{
+waitpid(pid, &status, WUNTRACED);
+}
+return (1);
 }
