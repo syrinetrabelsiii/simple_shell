@@ -1,5 +1,5 @@
 help: help [-dms] [pattern ...]
-    Display information about builtin commands.
+    Displays information about builtin commands.
 
     Displays brief summaries of builtin commands.  If PATTERN is
     specified, gives detailed help on all commands matching PATTERN,
